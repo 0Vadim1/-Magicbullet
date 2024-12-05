@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магічна куля</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black; 
+            overflow: hidden; 
+            position: relative; 
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkling 1.5s infinite alternate;
+        }
+
+        @keyframes twinkling {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes ballAnimation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), inset 0 0 50px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 80px rgba(255, 255, 255, 0.9), inset 0 0 100px rgba(255, 255, 255, 0.7);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), inset 0 0 50px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes colorShift {
+            0% {
+                background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+            }
+            50% {
+                background: radial-gradient(circle, rgba(252, 94, 251, 1) 0%, rgba(63, 70, 107, 1) 100%);
+            }
+            100% {
+                background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+            }
+        }
+		.particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    animation: particles 1.5s linear infinite;
+}
+
+@keyframes particles {
+    0% {
+        opacity: 0.1;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+}
+
+        .ball {
+            width: 400px; 
+            height: 400px; 
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+            animation: colorShift 5s infinite alternate;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), inset 0 0 50px rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .answer-text {
+            color: #fff;
+            font-size: 28px; 
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            width: 160px; 
+            height: 160px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .animate {
+            animation: ballAnimation 0.5s ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+    <script>
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 3 + 1; 
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.left = `${Math.random() * 100}vw`;
+            document.body.appendChild(star);
+        }
+
+        const container = document.createElement('div');
+        container.style.textAlign = 'center';
+        document.body.appendChild(container);
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Введіть ваше питання...';
+        input.style.fontSize = '20px';
+        input.style.marginBottom = '20px';
+        input.style.padding = '10px';
+        container.appendChild(input);
+
+        const ball = document.createElement('div');
+        ball.classList.add('ball');
+        container.appendChild(ball);
+
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 1.5}s`;
+            ball.appendChild(particle);
+        }
+
+        const answerText = document.createElement('div');
+        answerText.classList.add('answer-text');
+        answerText.innerText = 'Запитайте у кулі';
+        ball.appendChild(answerText);
+
+        const answers = ['Так', 'Ні', 'Можливо', 'Запитайте пізніше', 'Однозначно', 'Малоймовірно'];
+
+        function getRandomAnswer() {
+            const randomIndex = Math.floor(Math.random() * answers.length);
+            answerText.innerText = answers[randomIndex];
+            answerText.classList.add('animate-text');
+        }
+
+        ball.addEventListener('click', () => {
+            if (input.value.trim()) {
+                ball.classList.add('animate');
+                setTimeout(() => {
+                    ball.classList.remove('animate');
+                }, 500);
+                getRandomAnswer();
+            } else {
+                alert('Будь ласка, введіть ваше питання!');
+            }
+        });
+    </script>
+</body>
+</html>
